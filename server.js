@@ -9,10 +9,16 @@ console.log("url ", process.env.CLIENT_URL);
 
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+      // Allow all origins dynamically:
+      callback(null, origin);
+    },
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
